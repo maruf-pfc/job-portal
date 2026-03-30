@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { assets } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
 
 const Hero = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [locationQuery, setLocationQuery] = useState("");
+  const {setSearchFilter, setIsSearched } = useContext(AppContext);
+
+  const titleRef = useRef(null);
+  const locationRef = useRef(null);
 
   const handleSearch = () => {
-    if (searchQuery.trim() || locationQuery.trim()) {
-      console.log("Search:", searchQuery, "Location:", locationQuery);
-      // Add navigation or search logic here
-    }
-  };
+    setSearchFilter({
+      title: titleRef.current.value,
+      location: locationRef.current.value,
+    });
+    setIsSearched(true);
+    // console.log("Search Filter Updated:", {
+    //   title: titleRef.current.value,
+    //   location: locationRef.current.value,
+    // })
+  }
 
   return (
     <section className="bg-linear-to-b from-blue-50 to-white py-16 md:py-24">
@@ -40,10 +48,8 @@ const Hero = () => {
                   <input
                     type="text"
                     placeholder="Job title or keyword..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="flex-1 outline-none text-gray-700 placeholder-gray-400 bg-transparent"
-                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    ref={titleRef}
                   />
                 </div>
 
@@ -57,10 +63,8 @@ const Hero = () => {
                   <input
                     type="text"
                     placeholder="City or location..."
-                    value={locationQuery}
-                    onChange={(e) => setLocationQuery(e.target.value)}
                     className="flex-1 outline-none text-gray-700 placeholder-gray-400 bg-transparent"
-                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                    ref={locationRef}
                   />
                 </div>
 
