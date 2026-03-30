@@ -1,9 +1,10 @@
 import React, { useState, useContext, useRef } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
+import TrustedBy from "./TrustedBy";
 
 const Hero = () => {
-  const {setSearchFilter, setIsSearched } = useContext(AppContext);
+  const { setSearchFilter, setIsSearched } = useContext(AppContext);
 
   const titleRef = useRef(null);
   const locationRef = useRef(null);
@@ -18,7 +19,7 @@ const Hero = () => {
     //   title: titleRef.current.value,
     //   location: locationRef.current.value,
     // })
-  }
+  };
 
   return (
     <section className="bg-linear-to-b from-blue-50 to-white py-16 md:py-24">
@@ -108,69 +109,7 @@ const Hero = () => {
           </div>
 
           {/* Trusted by */}
-          <div className="pt-12 md:pt-16">
-            <div className="text-center mb-8">
-              <p className="text-gray-600 text-sm md:text-base font-medium uppercase tracking-wider">
-                Trusted By
-              </p>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mt-2">
-                Leading Companies Worldwide
-              </h3>
-            </div>
-
-            {/* Company Logos Grid */}
-            <div className="bg-gray-50 rounded-xl py-8 md:py-12 px-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto items-center justify-center">
-                <div className="flex justify-center">
-                  <img
-                    src={assets.microsoft_logo}
-                    alt="Microsoft"
-                    className="h-12 w-auto"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <img
-                    src={assets.walmart_logo}
-                    alt="Walmart"
-                    className="h-12 w-auto"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <img
-                    src={assets.accenture_logo}
-                    alt="Accenture"
-                    className="h-12 w-auto"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <img
-                    src={assets.samsung_logo}
-                    alt="Samsung"
-                    className="h-12 w-auto"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <img
-                    src={assets.adobe_logo}
-                    alt="Adobe"
-                    className="h-12 w-auto"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <img
-                    src={assets.amazon_logo}
-                    alt="Amazon"
-                    className="h-12 w-auto"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <TrustedBy />
         </div>
       </div>
     </section>

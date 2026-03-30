@@ -5,7 +5,7 @@ const JobCard = ({ job }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       {/* Company Header */}
-      <div className="flex items-start gap-3 p-4 md:p-5 border-b border-gray-100">
+      <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-3 p-4 md:p-5 border-b border-gray-100">
         <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
           <img src={assets.company_icon} alt="Company" className="w-6 h-6" />
         </div>
@@ -20,11 +20,11 @@ const JobCard = ({ job }) => {
         <div className="flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-xs font-medium">
             <img src={assets.location_icon} alt="" className="w-3 h-3" />
-            <span className="hidden sm:inline">{job.location}</span>
+            <span className="sm:inline">{job.location}</span>
           </span>
           <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full text-xs font-medium">
             <img src={assets.suitcase_icon} alt="" className="w-3 h-3" />
-            <span className="hidden sm:inline">{job.level}</span>
+            <span className="sm:inline">{job.level}</span>
           </span>
         </div>
 
