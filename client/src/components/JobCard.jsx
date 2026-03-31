@@ -1,7 +1,10 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 const JobCard = ({ job }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       {/* Company Header */}
@@ -37,10 +40,10 @@ const JobCard = ({ job }) => {
 
       {/* Footer - Buttons */}
       <div className="flex gap-2 p-4 md:p-5 border-t border-gray-100 bg-gray-50">
-        <button className="flex-1 px-3 md:px-4 py-1.5 md:py-2 bg-blue-600 text-white text-sm md:text-base font-semibold rounded-md hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 hover:shadow-md cursor-pointer">
+        <button className="flex-1 px-3 md:px-4 py-1.5 md:py-2 bg-blue-600 text-white text-sm md:text-base font-semibold rounded-md hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 hover:shadow-md cursor-pointer" onClick={() => {navigate(`/apply-job/${job._id}`); scrollTo(0, 0)}}>
           Apply
         </button>
-        <button className="flex-1 px-3 md:px-4 py-1.5 md:py-2 border border-gray-300 text-gray-700 text-sm md:text-base font-semibold rounded-md hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 cursor-pointer">
+        <button className="flex-1 px-3 md:px-4 py-1.5 md:py-2 border border-gray-300 text-gray-700 text-sm md:text-base font-semibold rounded-md hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 cursor-pointer" onClick={() => {navigate(`/apply-job/${job._id}`); scrollTo(0, 0)}}>
           More
         </button>
       </div>

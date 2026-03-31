@@ -15,23 +15,43 @@ const JobListing = () => {
   const [filteredJobs, setFilteredJobs] = useState(jobs);
 
   const handleCategoryChange = (category) => {
-    setSelectedCategories((prev) => 
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    )
-  }
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
+    );
+  };
   const handleLocationChange = (location) => {
-    setSelectedLocations((prev) => 
-      prev.includes(location) ? prev.filter((c) => c !== location) : [...prev, location]
-    )
-  }
+    setSelectedLocations((prev) =>
+      prev.includes(location)
+        ? prev.filter((c) => c !== location)
+        : [...prev, location],
+    );
+  };
 
   useEffect(() => {
-    const matchesTitle = job => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
-    const matchesLocationSearch = job => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
-    const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job.category);
-    const matchesLocation = job => selectedLocations.length === 0 || selectedLocations.includes(job.location);
+    const matchesTitle = (job) =>
+      searchFilter.title === "" ||
+      job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
+    const matchesLocationSearch = (job) =>
+      searchFilter.location === "" ||
+      job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
+    const matchesCategory = (job) =>
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(job.category);
+    const matchesLocation = (job) =>
+      selectedLocations.length === 0 ||
+      selectedLocations.includes(job.location);
 
-    const newFilteredJobs = jobs.slice().filter(job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesLocationSearch(job));
+    const newFilteredJobs = jobs
+      .slice()
+      .filter(
+        (job) =>
+          matchesCategory(job) &&
+          matchesLocation(job) &&
+          matchesTitle(job) &&
+          matchesLocationSearch(job),
+      );
 
     setFilteredJobs(newFilteredJobs);
     setCurrentPage(1); // Reset to first page on filter change
@@ -106,7 +126,7 @@ const JobListing = () => {
                             name={category}
                             id={category}
                             onChange={() => handleCategoryChange(category)}
-                            checked = {selectedCategories.includes(category)}
+                            checked={selectedCategories.includes(category)}
                             className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                           <label
@@ -135,7 +155,7 @@ const JobListing = () => {
                             name={location}
                             id={location}
                             onChange={() => handleLocationChange(location)}
-                            checked = {selectedLocations.includes(location)}
+                            checked={selectedLocations.includes(location)}
                             className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                           <label
@@ -203,7 +223,10 @@ const JobListing = () => {
                 <button
                   onClick={() =>
                     setCurrentPage(
-                      Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6)),
+                      Math.min(
+                        currentPage + 1,
+                        Math.ceil(filteredJobs.length / 6),
+                      ),
                     )
                   }
                   disabled={currentPage === Math.ceil(filteredJobs.length / 6)}
