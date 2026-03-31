@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCard from "./JobCard";
@@ -9,6 +9,33 @@ const JobListing = () => {
 
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+
+  const [filteredJobs, setFilteredJobs] = useState(jobs);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prev) => 
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    )
+  }
+  const handleLocationChange = (location) => {
+    setSelectedLocations((prev) => 
+      prev.includes(location) ? prev.filter((c) => c !== location) : [...prev, location]
+    )
+  }
+
+  useEffect(() => {
+    const matchesTitle = job => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
+    const matchesLocationSearch = job => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
+    const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job.category);
+    const matchesLocation = job => selectedLocations.length === 0 || selectedLocations.includes(job.location);
+
+    const newFilteredJobs = jobs.slice().filter(job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesLocationSearch(job));
+
+    setFilteredJobs(newFilteredJobs);
+    setCurrentPage(1); // Reset to first page on filter change
+  }, [searchFilter, selectedCategories, selectedLocations, jobs]);
 
   return (
     <div className="min-h-screen bg-gray-50" id="job-list">
@@ -78,6 +105,8 @@ const JobListing = () => {
                             type="checkbox"
                             name={category}
                             id={category}
+                            onChange={() => handleCategoryChange(category)}
+                            checked = {selectedCategories.includes(category)}
                             className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                           <label
@@ -105,6 +134,8 @@ const JobListing = () => {
                             type="checkbox"
                             name={location}
                             id={location}
+                            onChange={() => handleLocationChange(location)}
+                            checked = {selectedLocations.includes(location)}
                             className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                           <label
@@ -135,7 +166,7 @@ const JobListing = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Job Card */}
-              {jobs
+              {filteredJobs
                 .slice((currentPage - 1) * 6, currentPage * 6)
                 .map((job, index) => {
                   return <JobCard key={index} job={job} />;
@@ -143,7 +174,7 @@ const JobListing = () => {
             </div>
 
             {/* Pagination */}
-            {jobs.length > 0 && (
+            {filteredJobs.length > 0 && (
               <div className="flex items-center justify-center mt-8 gap-3">
                 <button
                   onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
@@ -152,7 +183,7 @@ const JobListing = () => {
                 >
                   <img src={assets.left_arrow_icon} alt="Previous" />
                 </button>
-                {Array.from({ length: Math.ceil(jobs.length / 6) }).map(
+                {Array.from({ length: Math.ceil(filteredJobs.length / 6) }).map(
                   (_, index) => (
                     <button
                       key={index}
@@ -172,10 +203,10 @@ const JobListing = () => {
                 <button
                   onClick={() =>
                     setCurrentPage(
-                      Math.min(currentPage + 1, Math.ceil(jobs.length / 6)),
+                      Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6)),
                     )
                   }
-                  disabled={currentPage === Math.ceil(jobs.length / 6)}
+                  disabled={currentPage === Math.ceil(filteredJobs.length / 6)}
                   className="w-10 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <img src={assets.right_arrow_icon} alt="Next" />
