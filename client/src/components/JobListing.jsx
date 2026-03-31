@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCard from "./JobCard";
 
 const JobListing = () => {
-  const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext);
-  
+  const { isSearched, searchFilter, setSearchFilter, jobs } =
+    useContext(AppContext);
+
+  const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" id="job-list">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
@@ -51,58 +55,69 @@ const JobListing = () => {
                   </div>
                 )}
 
-              {/* Filter by Category */}
-              <div className="pb-6 border-b border-gray-200">
-                <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wider mb-4">
-                  Category
-                </h4>
-                <ul className="space-y-3">
-                  {JobCategories.map((category, index) => {
-                    return (
-                      <li key={index} className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          name={category}
-                          id={category}
-                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        />
-                        <label
-                          htmlFor={category}
-                          className="text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
-                        >
-                          {category}
-                        </label>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="lg:hidden bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                {showFilters ? "Close" : "Filter Jobs"}
+              </button>
 
-              {/* Filter by Location */}
-              <div>
-                <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wider mb-4">
-                  Location
-                </h4>
-                <ul className="space-y-3">
-                  {JobLocations.map((location, index) => {
-                    return (
-                      <li key={index} className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          name={location}
-                          id={location}
-                          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        />
-                        <label
-                          htmlFor={location}
-                          className="text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
-                        >
-                          {location}
-                        </label>
-                      </li>
-                    );
-                  })}
-                </ul>
+              <div
+                className={`${showFilters ? "block" : "hidden"} lg:block space-y-6`}
+              >
+                {/* Filter by Category */}
+                <div className="pb-6 border-b border-gray-200">
+                  <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wider mb-4">
+                    Category
+                  </h4>
+                  <ul className="space-y-3">
+                    {JobCategories.map((category, index) => {
+                      return (
+                        <li key={index} className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            name={category}
+                            id={category}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={category}
+                            className="text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
+                          >
+                            {category}
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+
+                {/* Filter by Location */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wider mb-4">
+                    Location
+                  </h4>
+                  <ul className="space-y-3">
+                    {JobLocations.map((location, index) => {
+                      return (
+                        <li key={index} className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            name={location}
+                            id={location}
+                            className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                          <label
+                            htmlFor={location}
+                            className="text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
+                          >
+                            {location}
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -120,10 +135,53 @@ const JobListing = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Job Card */}
-              {jobs.map((job, index) => {
-                return <JobCard key={index} job={job} />;
-              })}
+              {jobs
+                .slice((currentPage - 1) * 6, currentPage * 6)
+                .map((job, index) => {
+                  return <JobCard key={index} job={job} />;
+                })}
             </div>
+
+            {/* Pagination */}
+            {jobs.length > 0 && (
+              <div className="flex items-center justify-center mt-8 gap-3">
+                <button
+                  onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="w-10 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <img src={assets.left_arrow_icon} alt="Previous" />
+                </button>
+                {Array.from({ length: Math.ceil(jobs.length / 6) }).map(
+                  (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPage(index + 1)}
+                      className={`w-10 h-10 flex items-center justify-center rounded-md border text-sm font-medium transition-colors
+                          ${
+                            currentPage === index + 1
+                              ? "bg-blue-600 text-white border-blue-600"
+                              : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                          }
+                        `}
+                    >
+                      {index + 1}
+                    </button>
+                  ),
+                )}
+                <button
+                  onClick={() =>
+                    setCurrentPage(
+                      Math.min(currentPage + 1, Math.ceil(jobs.length / 6)),
+                    )
+                  }
+                  disabled={currentPage === Math.ceil(jobs.length / 6)}
+                  className="w-10 h-10 flex items-center justify-center rounded-md border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <img src={assets.right_arrow_icon} alt="Next" />
+                </button>
+              </div>
+            )}
           </section>
         </div>
       </div>

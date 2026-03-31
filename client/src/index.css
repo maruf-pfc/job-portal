@@ -16,7 +16,13 @@
 }
 
 .animate-slide {
-  animation: slide 15s linear infinite; /* faster */
+  animation: slide 18s linear infinite;
+}
+
+@media (max-width: 640px) {
+  .animate-slide {
+    animation: slide 10s linear infinite;
+  }
 }
 
 .animate-slide:hover {

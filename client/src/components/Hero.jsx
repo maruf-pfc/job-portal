@@ -22,7 +22,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="bg-linear-to-b from-blue-50 to-white py-16 md:py-24">
+    <section className="bg-linear-to-b from-blue-50 to-white pt-12 md:pt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center space-y-6 mb-12">
           {/* Heading */}
